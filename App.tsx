@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import * as SplashScreen from "expo-splash-screen";
 
@@ -11,19 +11,15 @@ import {
 
 import theme from "./src/global/styles/theme";
 import { Dashboard } from "./src/screens/Dashboard";
-import { View } from "react-native";
-
-SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [appIsReady, setAppIsReady] = useState(false);
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
     Poppins_500Medium,
     Poppins_700Bold,
   });
 
-  const onLayoutRootView = useCallback(async () => {
+  const isFontsLoaded = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
     }
@@ -34,10 +30,14 @@ export default function App() {
   }
 
   return (
-    <View onLayout={onLayoutRootView}>
-      <ThemeProvider theme={theme}>
-        <Dashboard />
-      </ThemeProvider>
-    </View>
+    <>
+      {isFontsLoaded() ? (
+        <ThemeProvider theme={theme}>
+          <Dashboard />
+        </ThemeProvider>
+      ) : (
+        SplashScreen.preventAutoHideAsync()
+      )}
+    </>
   );
 }

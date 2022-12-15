@@ -11,12 +11,26 @@ import {
 import { Input } from "../../components/Form/Input";
 import { Button } from "../../components/Form/Button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
-import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
 import { CategorySelect } from "../CategorySelect";
+import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
 
 export function Register() {
+  const [category, setCategory] = useState({
+    key: "category",
+    name: "Categoria",
+  });
+
   const [transactionType, setTransactionType] = useState("");
+
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
+
+  function handleCloseModal() {
+    setCategoryModalOpen(false);
+  }
+
+  function handleOpenModal() {
+    setCategoryModalOpen(true);
+  }
 
   function handleTransactionType(type: "up" | "down") {
     setTransactionType(type);
@@ -46,13 +60,17 @@ export function Register() {
               type="down"
             />
           </TransactionType>
-          <CategorySelectButton title="Categoria" />
+          <CategorySelectButton title="Categoria" onPress={handleOpenModal} />
         </Fields>
         <Button title="Enviar" />
       </Form>
 
       <Modal visible={categoryModalOpen}>
-        <CategorySelect />
+        <CategorySelect
+          category={category}
+          setCategory={setCategory}
+          closeSelectCategory={handleCloseModal}
+        />
       </Modal>
     </Container>
   );

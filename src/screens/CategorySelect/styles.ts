@@ -1,6 +1,10 @@
-import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
+import { RFValue } from "react-native-responsive-fontsize";
 import { Feather } from "@expo/vector-icons";
+
+interface CategoryProps {
+  isActive: boolean;
+}
 
 export const Container = styled.View`
   flex: 1;
@@ -24,7 +28,7 @@ export const Title = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled.View`
+export const Category = styled.TouchableOpacity<CategoryProps>`
   width: 100%;
   margin-bottom: 10px;
 

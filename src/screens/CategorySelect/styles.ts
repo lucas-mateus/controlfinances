@@ -30,11 +30,13 @@ export const Title = styled.Text`
 
 export const Category = styled.TouchableOpacity<CategoryProps>`
   width: 100%;
-  margin-bottom: 10px;
 
-  padding: ${RFValue(16)}px;
+  padding: ${RFValue(14)}px;
   flex-direction: row;
   align-items: center;
+
+  background-color: ${({ theme, isActive }) =>
+    isActive ? theme.color.primary_light : theme.color.background};
 `;
 
 export const Icon = styled(Feather)`

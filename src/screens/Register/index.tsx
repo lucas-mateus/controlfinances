@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Modal } from "react-native";
+import { useForm } from "react-hook-form";
+import { InputForm } from "../../components/Form/InputForm";
 import {
   Container,
   Header,
@@ -8,17 +10,23 @@ import {
   Fields,
   TransactionType,
 } from "./styles";
-import { Input } from "../../components/Form/Input";
 import { Button } from "../../components/Form/Button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategorySelect } from "../CategorySelect";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
+
+interface FormData {
+  name: string;
+  amount: string;
+}
 
 export function Register() {
   const [category, setCategory] = useState({
     key: "category",
     name: "Categoria",
   });
+
+  const { control, handleSubmit } = useForm();
 
   const [transactionType, setTransactionType] = useState("");
 
@@ -36,6 +44,17 @@ export function Register() {
     setTransactionType(type);
   }
 
+  function handleResgister(form: FormData) {
+    const data = {
+      name: form.name,
+      amount: form.amount,
+      transactionType,
+      category: category.key,
+    };
+
+    console.log(data);
+  }
+
   return (
     <Container>
       <Header>
@@ -44,8 +63,10 @@ export function Register() {
 
       <Form>
         <Fields>
-          <Input placeholder="Nome" />
-          <Input placeholder="Preço" keyboardType="numeric" />
+          <InputForm name="name" placeholder="Nome" control={control} />
+
+          <InputForm name="amount" placeholder="Preço" control={control} />
+
           <TransactionType>
             <TransactionTypeButton
               isActive={transactionType === "up"}
@@ -65,7 +86,7 @@ export function Register() {
             onPress={handleOpenModal}
           />
         </Fields>
-        <Button title="Enviar" />
+        <Button title="Enviar" onPress={handleSubmit(handleResgister)} />
       </Form>
 
       <Modal visible={categoryModalOpen}>

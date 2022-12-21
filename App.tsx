@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
 import { ThemeProvider } from "styled-components";
 import * as SplashScreen from "expo-splash-screen";
+import { NavigationContainer } from "@react-navigation/native";
 
 import {
   useFonts,
@@ -10,8 +11,7 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import theme from "./src/global/styles/theme";
-import { Register } from "./src/screens/Register";
-import { Dashboard } from "./src/screens/Dashboard";
+import { AppRoutes } from "./src/routes/app.routes";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -34,7 +34,9 @@ export default function App() {
     <>
       {isFontsLoaded() ? (
         <ThemeProvider theme={theme}>
-          <Register />
+          <NavigationContainer>
+            <AppRoutes />
+          </NavigationContainer>
         </ThemeProvider>
       ) : (
         SplashScreen.preventAutoHideAsync()

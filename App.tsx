@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { ThemeProvider } from "styled-components";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import {
   useFonts,
@@ -12,6 +13,7 @@ import {
 
 import theme from "./src/global/styles/theme";
 import { AppRoutes } from "./src/routes/app.routes";
+import { View } from "react-native";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -31,7 +33,7 @@ export default function App() {
   }
 
   return (
-    <>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       {isFontsLoaded() ? (
         <ThemeProvider theme={theme}>
           <NavigationContainer>
@@ -39,8 +41,8 @@ export default function App() {
           </NavigationContainer>
         </ThemeProvider>
       ) : (
-        SplashScreen.preventAutoHideAsync()
+        <View>SplashScreen.preventAutoHideAsync()</View>
       )}
-    </>
+    </GestureHandlerRootView>
   );
 }

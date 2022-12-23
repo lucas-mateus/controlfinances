@@ -60,7 +60,7 @@ export function Register() {
     setTransactionType(type);
   }
 
-  function handleResgister(form: FormData) {
+  function handleRegister(form: FormData) {
     if (!transactionType) {
       return Alert.alert("Selecione o tipo da transação!");
     }
@@ -122,14 +122,14 @@ export function Register() {
               onPress={handleOpenModal}
             />
           </Fields>
-          <Button title="Enviar" onPress={handleSubmit(handleResgister)} />
+          <Button title="Enviar" onPress={handleSubmit(handleRegister)} />
         </Form>
 
         <Modal visible={categoryModalOpen}>
           <CategorySelect
             category={category}
             setCategory={setCategory}
-            closeSelectCategory={handleCloseModal}
+            handleCloseModal={handleCloseModal}
           />
         </Modal>
       </Container>

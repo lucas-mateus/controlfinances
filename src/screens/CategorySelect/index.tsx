@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList } from "react-native";
+import { FlatList } from "react-native-gesture-handler";
 import { Button } from "../../components/Form/Button";
 import { categories } from "../../utils/categories";
 import {
@@ -21,13 +21,13 @@ interface Category {
 interface Props {
   category: Category;
   setCategory: (category: Category) => void;
-  closeSelectCategory: () => void;
+  handleCloseModal: () => void;
 }
 
 export function CategorySelect({
   category,
   setCategory,
-  closeSelectCategory,
+  handleCloseModal,
 }: Props) {
   function handleCategorySelect(category: Category) {
     setCategory(category);
@@ -55,7 +55,7 @@ export function CategorySelect({
       />
 
       <Footer>
-        <Button title="Selecionar" onPress={closeSelectCategory} />
+        <Button title="Selecionar" onPress={handleCloseModal} />
       </Footer>
     </Container>
   );

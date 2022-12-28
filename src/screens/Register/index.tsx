@@ -64,7 +64,7 @@ export function Register() {
     setCategoryModalOpen(true);
   }
 
-  function handleTransactionType(type: "up" | "down") {
+  function handleTransactionType(type: "positive" | "negative") {
     setTransactionType(type);
   }
 
@@ -81,7 +81,7 @@ export function Register() {
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
       date: new Date(),
     };
@@ -110,7 +110,6 @@ export function Register() {
   useEffect(() => {
     async function loadData() {
       const data = await AsyncStorage.getItem(dataKey);
-      console.log(data);
     }
 
     loadData();
@@ -144,14 +143,14 @@ export function Register() {
 
             <TransactionType>
               <TransactionTypeButton
-                isActive={transactionType === "up"}
-                onPress={() => handleTransactionType("up")}
+                isActive={transactionType === "positive"}
+                onPress={() => handleTransactionType("positive")}
                 title="Entrada"
                 type="up"
               />
               <TransactionTypeButton
-                isActive={transactionType === "down"}
-                onPress={() => handleTransactionType("down")}
+                isActive={transactionType === "negative"}
+                onPress={() => handleTransactionType("negative")}
                 title="Saída"
                 type="down"
               />

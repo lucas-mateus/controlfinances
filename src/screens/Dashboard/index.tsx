@@ -1,4 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator } from "react-native";
+import { useTheme } from "styled-components/";
 import React, { useEffect, useState, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { HighlightCard } from "../../components/HighlightCard";
@@ -22,6 +24,7 @@ import {
   Title,
   TransactionsList,
   LogoutButton,
+  LoadingContainer,
 } from "./styles";
 
 export interface DataListProps extends TransactionCardProps {
@@ -42,6 +45,8 @@ export function Dashboard() {
   const [highLightData, setHighLightData] = useState<HighLightData>(
     {} as HighLightData
   );
+  const [isLoading, setIsLoading] = useState(true);
+  const theme = useTheme();
 
   async function loadTransactions() {
     const dataKey = "@controlfinances:transactions";
@@ -104,6 +109,7 @@ export function Dashboard() {
       },
     });
 
+    setIsLoading(false);
     setTransactions(transactionsFormatted);
   }
 
@@ -119,54 +125,62 @@ export function Dashboard() {
 
   return (
     <Container>
-      <Header>
-        <UserWrapper>
-          <UserInfo>
-            <Photo
-              source={{
-                uri: "https://avatars.githubusercontent.com/u/50703604?v=4",
-              }}
+      {isLoading ? (
+        <LoadingContainer>
+          <ActivityIndicator color={theme.color.secondary} size="large" />
+        </LoadingContainer>
+      ) : (
+        <>
+          <Header>
+            <UserWrapper>
+              <UserInfo>
+                <Photo
+                  source={{
+                    uri: "https://avatars.githubusercontent.com/u/50703604?v=4",
+                  }}
+                />
+                <User>
+                  <Greeting>Olá,</Greeting>
+                  <Username>Lucas</Username>
+                </User>
+              </UserInfo>
+
+              <LogoutButton onPress={() => {}}>
+                <Icon name="power" />
+              </LogoutButton>
+            </UserWrapper>
+          </Header>
+          <HighlightCards>
+            <HighlightCard
+              type="up"
+              title="Entrada"
+              amount={highLightData.entries?.amount}
+              lastTransaction="Última entrada 13 de abril"
             />
-            <User>
-              <Greeting>Olá,</Greeting>
-              <Username>Lucas</Username>
-            </User>
-          </UserInfo>
+            <HighlightCard
+              type="down"
+              title="Saída"
+              amount={highLightData.expensives?.amount}
+              lastTransaction="Última entrada 13 de abril"
+            />
+            <HighlightCard
+              type="total"
+              title="Total"
+              amount={highLightData.total?.amount}
+              lastTransaction="Última entrada 13 de abril"
+            />
+          </HighlightCards>
 
-          <LogoutButton onPress={() => {}}>
-            <Icon name="power" />
-          </LogoutButton>
-        </UserWrapper>
-      </Header>
-      <HighlightCards>
-        <HighlightCard
-          type="up"
-          title="Entrada"
-          amount={highLightData.entries?.amount}
-          lastTransaction="Última entrada 13 de abril"
-        />
-        <HighlightCard
-          type="down"
-          title="Saída"
-          amount={highLightData.expensives?.amount}
-          lastTransaction="Última entrada 13 de abril"
-        />
-        <HighlightCard
-          type="total"
-          title="Total"
-          amount={highLightData.total?.amount}
-          lastTransaction="Última entrada 13 de abril"
-        />
-      </HighlightCards>
-
-      <Transactions>
-        <Title>Listagem</Title>
-        <TransactionsList
-          data={transactions}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <TransactionCard data={item} />}
-        />
-      </Transactions>
+          <Transactions>
+            <Title>Listagem</Title>
+            <TransactionsList
+              data={transactions}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => <TransactionCard data={item} />}
+            />
+          </Transactions>
+        </>
+      )}
     </Container>
   );
 }

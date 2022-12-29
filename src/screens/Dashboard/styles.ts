@@ -4,7 +4,7 @@ import { Feather } from "@expo/vector-icons";
 
 import { BorderlessButton } from "react-native-gesture-handler";
 
-import { DataListProps } from ".";
+import { DataListProps } from "./index";
 
 import {
   getBottomSpace,

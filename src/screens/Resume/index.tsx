@@ -7,6 +7,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { VictoryPie } from "victory-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import theme from "../../global/styles/theme";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 
 interface TransactionData {
   type: "positive" | "negative";
@@ -88,24 +89,30 @@ export function Resume() {
       <Header>
         <Title>Resumo por categoria</Title>
       </Header>
-      <Content>
+
+      <Content
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingBottom: useBottomTabBarHeight(),
+        }}
+      >
         <ChartContainer>
           <VictoryPie
             data={totalByCategories}
             colorScale={totalByCategories.map((category) => category.color)}
             style={{
               labels: {
-                fontSize: RFValue(18),
+                fontSize: RFValue(15),
                 fontWeight: "bold",
                 fill: theme.color.shape,
               },
             }}
-            labelRadius={50}
+            labelRadius={60}
             x="percent"
             y="total"
           />
         </ChartContainer>
-
         {totalByCategories.map((item) => (
           <HistoryCard
             key={item.key}

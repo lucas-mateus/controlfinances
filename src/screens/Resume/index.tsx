@@ -18,6 +18,8 @@ interface CategoryData {
   name: string;
   total: string;
   color: string;
+  percent: number;
+  percentFormatted: string;
 }
 
 export function Resume() {
@@ -33,6 +35,13 @@ export function Resume() {
       (expensive: TransactionData) => expensive.type === "negative"
     );
 
+    const totalExpensives = responseFormatted.reduce(
+      (accumulator: number, expensives: TransactionData) => {
+        return accumulator + Number(expensives.amount);
+      },
+      0
+    );
+
     const totalByCategory: CategoryData[] = [];
 
     categories.forEach((category) => {
@@ -44,6 +53,8 @@ export function Resume() {
         }
       });
 
+      const percent = (categorySum / totalExpensives).toFixed(0);
+
       if (categorySum > 0) {
         const total = categorySum.toLocaleString("pt-BR", {
           style: "currency",
@@ -54,6 +65,8 @@ export function Resume() {
           name: category.name,
           total,
           color: category.color,
+          percentFormatted: `${percent}%`,
+          percent: Number(percent),
         });
       }
     });

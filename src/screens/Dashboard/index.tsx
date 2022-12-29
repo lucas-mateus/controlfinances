@@ -61,12 +61,17 @@ export function Dashboard() {
           .map((transaction) => new Date(transaction.date).getTime())
       )
     );
-    return `${filteredTransaction.getDate()} de ${filteredTransaction.toLocaleDateString(
-      "pt-BR",
-      {
-        month: "long",
-      }
-    )}`;
+
+    if (filteredTransaction.toString() != "Invalid Date") {
+      return `${filteredTransaction.getDate()} de ${filteredTransaction.toLocaleDateString(
+        "pt-BR",
+        {
+          month: "long",
+        }
+      )}`;
+    } else {
+      return "empty";
+    }
   }
 
   async function loadTransactions() {
@@ -117,12 +122,16 @@ export function Dashboard() {
       transactions,
       "positive"
     );
+
     const lastTransactionDateExpensives = getLastTransactionDate(
       transactions,
       "negative"
     );
 
-    const totalInterval = `01 à ${lastTransactionDateExpensives}`;
+    const totalInterval =
+      lastTransactionDateExpensives != "empty"
+        ? `01 à ${lastTransactionDateExpensives}`
+        : "";
 
     setHighLightData({
       entries: {
@@ -130,14 +139,20 @@ export function Dashboard() {
           style: "currency",
           currency: "BRL",
         }),
-        lastTransactionDate: `Última entrada dia ${lastTransactionDateEntries}`,
+        lastTransactionDate:
+          lastTransactionDateEntries != "empty"
+            ? `Última entrada dia ${lastTransactionDateEntries}`
+            : "",
       },
       expensives: {
         amount: expensiveTotal.toLocaleString("pt-BR", {
           style: "currency",
           currency: "BRL",
         }),
-        lastTransactionDate: `Última saída dia ${lastTransactionDateExpensives}`,
+        lastTransactionDate:
+          lastTransactionDateExpensives != "empty"
+            ? `Última saída dia ${lastTransactionDateExpensives}`
+            : "",
       },
       total: {
         amount: total.toLocaleString("pt-BR", {

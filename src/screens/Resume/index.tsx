@@ -103,10 +103,6 @@ export function Resume() {
     setTotalByCategories(totalByCategory);
   }
 
-  useEffect(() => {
-    loadData();
-  }, [selectedDate]);
-
   useFocusEffect(
     useCallback(() => {
       loadData();

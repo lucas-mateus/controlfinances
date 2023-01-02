@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import { StatusBar } from "react-native";
 import { ThemeProvider } from "styled-components";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
@@ -39,6 +40,7 @@ export default function App() {
         <ThemeProvider theme={theme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <NavigationContainer>
+              <StatusBar barStyle="light-content" translucent />
               <AppRoutes />
             </NavigationContainer>
           </GestureHandlerRootView>

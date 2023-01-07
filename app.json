@@ -4,6 +4,7 @@
     "scheme": "controlfinances",
     "slug": "controlfinances",
     "version": "1.0.0",
+    "plugins": ["expo-apple-authentication"],
     "assetBundlePatterns": ["**/*"]
   },
   "android": {

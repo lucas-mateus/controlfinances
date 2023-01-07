@@ -28,15 +28,15 @@ interface IAuthContextData {
   user: User;
   signIn(): Promise<void>;
   signInWithApple(): Promise<void>;
-  userIsLoading: boolean;
 }
 
 const AuthContext = createContext({} as IAuthContextData);
 
 function AuthProvider({ children }: AuthProviderProps) {
-  const [userIsLoading, setUserIsLoading] = useState(false);
+  const [userIsLoading, setUserIsLoading] = useState(true);
   const [user, setUser] = useState<User>({} as User);
   const [accessToken, setAccessToken] = useState(null);
+  const userStorageKey = "@controlfinances:user";
 
   const [request, response, promptAsync] = Google.useAuthRequest({
     clientId:
@@ -52,6 +52,7 @@ function AuthProvider({ children }: AuthProviderProps) {
     try {
       setUserIsLoading(true);
       await promptAsync();
+      await signInWithGoogle();
     } catch (error) {
       throw new Error(error);
       console.log(error);
@@ -71,7 +72,6 @@ function AuthProvider({ children }: AuthProviderProps) {
           },
         }
       );
-
       const userData = await userResponse.json();
 
       const userDataFormatted = {
@@ -82,7 +82,7 @@ function AuthProvider({ children }: AuthProviderProps) {
       };
       setUser(userDataFormatted);
       await AsyncStorage.setItem(
-        "@controlfinances:user",
+        userStorageKey,
         JSON.stringify(userDataFormatted)
       );
     } catch (error) {
@@ -109,7 +109,7 @@ function AuthProvider({ children }: AuthProviderProps) {
         };
         setUser(userDataFormatted);
         await AsyncStorage.setItem(
-          "@controlfinances:user",
+          userStorageKey,
           JSON.stringify(userDataFormatted)
         );
       }
@@ -120,16 +120,26 @@ function AuthProvider({ children }: AuthProviderProps) {
   }
 
   useEffect(() => {
+    async function loadStorageUser() {
+      const userStorage = await AsyncStorage.getItem(userStorageKey);
+
+      if (userStorage) {
+        const loggedUser = JSON.parse(userStorage) as User;
+        setUser(loggedUser);
+      }
+      setUserIsLoading(false);
+    }
+    loadStorageUser();
+  }, []);
+
+  useEffect(() => {
     if (response?.type === "success" && response.authentication?.accessToken) {
       setAccessToken(response.authentication.accessToken);
-      signInWithGoogle();
     }
-  }, [accessToken]);
+  }, [response]);
 
   return (
-    <AuthContext.Provider
-      value={{ user, signIn, signInWithApple, userIsLoading }}
-    >
+    <AuthContext.Provider value={{ user, signIn, signInWithApple }}>
       {children}
     </AuthContext.Provider>
   );

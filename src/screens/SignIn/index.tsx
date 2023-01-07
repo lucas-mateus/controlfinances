@@ -19,16 +19,30 @@ import { useAuth } from "../../hooks/auth";
 import { Alert } from "react-native";
 
 export function SignIn() {
-  const { user, signIn } = useAuth();
+  const { user, signIn, signInWithApple } = useAuth();
 
   async function handleSignInWithGoogle() {
     try {
       await signIn();
     } catch (error) {
       console.log(error);
-      Alert.alert("Erro ao realizar login! Não foi possivel conectar à conta.");
+      Alert.alert(
+        "Erro ao realizar login! Não foi possivel conectar à conta Google."
+      );
     }
   }
+
+  async function handleSignInWithApple() {
+    try {
+      await signInWithApple();
+    } catch (error) {
+      console.log(error);
+      Alert.alert(
+        "Erro ao realizar login! Não foi possivel conectar à conta Apple."
+      );
+    }
+  }
+
   return (
     <Container>
       <Header>
@@ -51,7 +65,11 @@ export function SignIn() {
             svg={GoogleSvg}
             onPress={handleSignInWithGoogle}
           />
-          <SignInSocialButton title="Entrar com Apple" svg={AppleSvg} />
+          <SignInSocialButton
+            title="Entrar com Apple"
+            svg={AppleSvg}
+            onPress={handleSignInWithApple}
+          />
         </FooterWrapper>
       </Footer>
     </Container>

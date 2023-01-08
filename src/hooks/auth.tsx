@@ -27,6 +27,7 @@ interface User {
 interface IAuthContextData {
   user: User;
   signIn(): Promise<void>;
+  signOut(): Promise<void>;
   signInWithApple(): Promise<void>;
 }
 
@@ -61,6 +62,15 @@ function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  async function signOut() {
+    const user = await AsyncStorage.getItem(userStorageKey);
+
+    if (user) {
+      await AsyncStorage.removeItem(userStorageKey);
+      setUser({} as User);
+    }
+  }
+
   async function signInWithGoogle() {
     try {
       const userResponse = await fetch(
@@ -80,11 +90,11 @@ function AuthProvider({ children }: AuthProviderProps) {
         email: userData.email,
         picture: userData?.picture,
       };
-      setUser(userDataFormatted);
       await AsyncStorage.setItem(
         userStorageKey,
         JSON.stringify(userDataFormatted)
       );
+      setUser(userDataFormatted);
     } catch (error) {
       console.log(error);
       throw new Error(error);
@@ -139,7 +149,7 @@ function AuthProvider({ children }: AuthProviderProps) {
   }, [response]);
 
   return (
-    <AuthContext.Provider value={{ user, signIn, signInWithApple }}>
+    <AuthContext.Provider value={{ user, signIn, signInWithApple, signOut }}>
       {children}
     </AuthContext.Provider>
   );

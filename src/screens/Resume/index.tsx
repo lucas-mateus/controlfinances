@@ -22,6 +22,7 @@ import { VictoryPie } from "victory-native";
 import { RFValue } from "react-native-responsive-fontsize";
 import theme from "../../global/styles/theme";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useAuth } from "../../hooks/auth";
 
 interface TransactionData {
   type: "positive" | "negative";
@@ -47,6 +48,8 @@ export function Resume() {
     []
   );
 
+  const { user } = useAuth();
+
   function handleDateChange(action: "next" | "prev") {
     if (action === "next") {
       setSelectedDate(addMonths(selectedDate, 1));
@@ -57,7 +60,7 @@ export function Resume() {
 
   async function loadData() {
     setIsLoading(true);
-    const dataKey = "@controlfinances:transactions";
+    const dataKey = `@controlfinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
     const responseFormatted = response ? JSON.parse(response) : [];
 

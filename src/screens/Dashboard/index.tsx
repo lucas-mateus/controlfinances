@@ -26,6 +26,7 @@ import {
   LogoutButton,
   LoadingContainer,
 } from "./styles";
+import { useAuth } from "../../hooks/auth";
 
 export interface DataListProps extends TransactionCardProps {
   id: string;
@@ -48,6 +49,8 @@ export function Dashboard() {
   );
   const [isLoading, setIsLoading] = useState(true);
   const theme = useTheme();
+
+  const { user, signOut } = useAuth();
 
   function getLastTransactionDate(
     collection: DataListProps[],
@@ -75,7 +78,7 @@ export function Dashboard() {
   }
 
   async function loadTransactions() {
-    const dataKey = "@controlfinances:transactions";
+    const dataKey = `@controlfinances:transactions_user:${user.id}`;
     const response = await AsyncStorage.getItem(dataKey);
 
     const transactions = response ? JSON.parse(response) : [];
@@ -187,16 +190,16 @@ export function Dashboard() {
               <UserInfo>
                 <Photo
                   source={{
-                    uri: "https://avatars.githubusercontent.com/u/50703604?v=4",
+                    uri: user.picture,
                   }}
                 />
                 <User>
                   <Greeting>Olá,</Greeting>
-                  <Username>Lucas</Username>
+                  <Username>{user.name}</Username>
                 </User>
               </UserInfo>
 
-              <LogoutButton onPress={() => {}}>
+              <LogoutButton onPress={signOut}>
                 <Icon name="power" />
               </LogoutButton>
             </UserWrapper>

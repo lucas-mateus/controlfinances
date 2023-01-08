@@ -19,6 +19,7 @@ import { Button } from "../../components/Form/Button";
 import { TransactionTypeButton } from "../../components/Form/TransactionTypeButton";
 import { CategorySelect } from "../CategorySelect";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
+import { useAuth } from "../../hooks/auth";
 
 interface FormData {
   name: string;
@@ -52,9 +53,11 @@ export function Register() {
 
   const [categoryModalOpen, setCategoryModalOpen] = useState(false);
 
+  const { user } = useAuth();
+
   const navigation = useNavigation();
 
-  const dataKey = "@controlfinances:transactions";
+  const dataKey = `@controlfinances:transactions_user:${user.id}`;
 
   function handleCloseModal() {
     setCategoryModalOpen(false);

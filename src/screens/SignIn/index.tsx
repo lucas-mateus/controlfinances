@@ -16,10 +16,10 @@ import LogoSvg from "../../assets/logo.svg";
 import AppleSvg from "../../assets/apple.svg";
 import GoogleSvg from "../../assets/google.svg";
 import { useAuth } from "../../hooks/auth";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 
 export function SignIn() {
-  const { user, signIn, signInWithApple } = useAuth();
+  const { signIn, signInWithApple } = useAuth();
 
   async function handleSignInWithGoogle() {
     try {
@@ -65,11 +65,13 @@ export function SignIn() {
             svg={GoogleSvg}
             onPress={handleSignInWithGoogle}
           />
-          <SignInSocialButton
-            title="Entrar com Apple"
-            svg={AppleSvg}
-            onPress={handleSignInWithApple}
-          />
+          {Platform.OS === "ios" && (
+            <SignInSocialButton
+              title="Entrar com Apple"
+              svg={AppleSvg}
+              onPress={handleSignInWithApple}
+            />
+          )}
         </FooterWrapper>
       </Footer>
     </Container>
